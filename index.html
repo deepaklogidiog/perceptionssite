@@ -71,19 +71,14 @@ a   { text-decoration: none; color: inherit; }
    HEADER / NAVIGATION
 ═══════════════════════════════════ */
 .header {
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(255,255,255,.98);
-  backdrop-filter: blur(10px);
+  background: var(--white);
   border-bottom: 1px solid var(--gray-lt);
   z-index: 1000;
-  padding: 16px 0;
-  transition: box-shadow .3s;
-}
-.header.scrolled {
-  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  padding: 20px 0;
 }
 .header__inner {
   max-width: 1200px;
@@ -158,8 +153,8 @@ a   { text-decoration: none; color: inherit; }
 /* Mobile Navigation */
 @media (max-width: 900px) {
   .nav {
-    position: fixed;
-    top: 77px;
+    position: absolute;
+    top: 100%;
     left: 0;
     right: 0;
     background: var(--white);
@@ -170,9 +165,13 @@ a   { text-decoration: none; color: inherit; }
     box-shadow: 0 8px 24px rgba(0,0,0,.1);
     transform: translateY(-120%);
     transition: transform .3s var(--ease);
+    opacity: 0;
+    pointer-events: none;
   }
   .nav.active {
     transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
   }
   .nav__link {
     width: 100%;
@@ -194,11 +193,14 @@ a   { text-decoration: none; color: inherit; }
   .menu-toggle {
     display: flex;
   }
+  .header {
+    position: relative;
+  }
 }
 
-/* Add padding to body for fixed header */
+/* Remove body padding - no longer needed */
 body {
-  padding-top: 77px;
+  padding-top: 0;
 }
 
 /* ═══════════════════════════════════
@@ -1762,19 +1764,8 @@ body {
 
 <script>
 /* ══════════════════════════════════════════════════
-   HEADER SCROLL EFFECT & MOBILE MENU
+   MOBILE MENU TOGGLE
 ══════════════════════════════════════════════════ */
-// Header scroll effect
-window.addEventListener('scroll', function() {
-  const header = document.getElementById('header');
-  if (window.scrollY > 50) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
-});
-
-// Mobile menu toggle
 const menuToggle = document.getElementById('menuToggle');
 const nav = document.getElementById('nav');
 
