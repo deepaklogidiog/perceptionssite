@@ -683,37 +683,24 @@ body {
 }
 
 /* ═══════════════════════════════════
-   ⑤ PORTFOLIO GALLERY - HORIZONTAL CAROUSEL
+   ⑤ PORTFOLIO GALLERY - AUTO-SCROLLING LOOP
 ═══════════════════════════════════ */
 .portfolio { background: var(--white); overflow: hidden; }
 .portfolio-carousel {
   position: relative;
   max-width: 100%;
   margin: 0 auto;
+  padding: 40px 0;
 }
 .portfolio-scroll {
   display: flex;
   gap: 24px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 40px 24px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--navy) var(--gray-lt);
+  align-items: center;
+  animation: portfolioLoop 40s linear infinite;
+  width: max-content;
 }
-.portfolio-scroll::-webkit-scrollbar {
-  height: 8px;
-}
-.portfolio-scroll::-webkit-scrollbar-track {
-  background: var(--gray-lt);
-  border-radius: 10px;
-}
-.portfolio-scroll::-webkit-scrollbar-thumb {
-  background: var(--navy);
-  border-radius: 10px;
-}
-.portfolio-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--navy-dark);
+.portfolio-scroll:hover {
+  animation-play-state: paused;
 }
 .portfolio-item {
   flex: 0 0 380px;
@@ -731,7 +718,7 @@ body {
   padding: 20px;
 }
 .portfolio-item:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-8px) scale(1.05);
   box-shadow: 0 16px 48px rgba(0,0,0,.25);
 }
 .portfolio-item img {
@@ -742,6 +729,11 @@ body {
   object-fit: contain;
   display: block;
   pointer-events: none;
+}
+
+@keyframes portfolioLoop {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 /* Lightbox/Modal for zoomed view */
@@ -1517,7 +1509,7 @@ body {
 </section>
 
 <!-- ═══════════════════════════════════
-     ⑤ PORTFOLIO GALLERY - HORIZONTAL CAROUSEL
+     ⑤ PORTFOLIO GALLERY - AUTO-SCROLLING LOOP
 ═══════════════════════════════════ -->
 <section class="section portfolio pg" id="portfolio">
   <div class="container">
@@ -1530,7 +1522,7 @@ body {
 
   <div class="portfolio-carousel">
     <div class="portfolio-scroll" id="portfolioScroll">
-      <!-- Image Portfolio Items -->
+      <!-- First Set of Images -->
       <div class="portfolio-item reveal" data-index="0">
         <img src="branding.jpeg" alt="Branding Project">
       </div>
@@ -1562,6 +1554,41 @@ body {
         <img src="book1.jpg" alt="Book Design 1">
       </div>
       <div class="portfolio-item reveal" data-index="10">
+        <img src="book2.jpg" alt="Book Design 2">
+      </div>
+      
+      <!-- Duplicate Set for Seamless Loop -->
+      <div class="portfolio-item" data-index="0">
+        <img src="branding.jpeg" alt="Branding Project">
+      </div>
+      <div class="portfolio-item" data-index="1">
+        <img src="flyer.jpeg" alt="Flyer Design">
+      </div>
+      <div class="portfolio-item" data-index="2">
+        <img src="packaging1.jpg" alt="Packaging Design 1">
+      </div>
+      <div class="portfolio-item" data-index="3">
+        <img src="packaging2.jpg" alt="Packaging Design 2">
+      </div>
+      <div class="portfolio-item" data-index="4">
+        <img src="post1.jpg" alt="Social Media Post 1">
+      </div>
+      <div class="portfolio-item" data-index="5">
+        <img src="post2.jpg" alt="Social Media Post 2">
+      </div>
+      <div class="portfolio-item" data-index="6">
+        <img src="post3.jpg" alt="Social Media Post 3">
+      </div>
+      <div class="portfolio-item" data-index="7">
+        <img src="post4.jpg" alt="Social Media Post 4">
+      </div>
+      <div class="portfolio-item" data-index="8">
+        <img src="standee.jpg" alt="Standee Design">
+      </div>
+      <div class="portfolio-item" data-index="9">
+        <img src="book1.jpg" alt="Book Design 1">
+      </div>
+      <div class="portfolio-item" data-index="10">
         <img src="book2.jpg" alt="Book Design 2">
       </div>
     </div>
@@ -2032,14 +2059,18 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   const lightboxPrev = document.getElementById('lightboxPrev');
   const lightboxNext = document.getElementById('lightboxNext');
   const lightboxCounter = document.getElementById('lightboxCounter');
-  const portfolioItems = document.querySelectorAll('.portfolio-item');
+  const allPortfolioItems = document.querySelectorAll('.portfolio-item');
+  
+  // Only count the first 11 unique items (before duplication)
+  const portfolioItems = Array.from(allPortfolioItems).slice(0, 11);
   
   let currentIndex = 0;
-  const totalImages = portfolioItems.length;
+  const totalImages = 11;
   
-  // Open lightbox when clicking portfolio item
-  portfolioItems.forEach((item, index) => {
+  // Open lightbox when clicking any portfolio item (including duplicates)
+  allPortfolioItems.forEach((item) => {
     item.addEventListener('click', function() {
+      const index = parseInt(this.getAttribute('data-index'));
       currentIndex = index;
       openLightbox();
     });
