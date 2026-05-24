@@ -683,61 +683,77 @@ body {
 }
 
 /* ═══════════════════════════════════
-   ⑤ PORTFOLIO GALLERY
+   ⑤ PORTFOLIO GALLERY - MASONRY GRID
 ═══════════════════════════════════ */
 .portfolio { background: var(--white); }
-.portfolio-slider {
-  position: relative;
-  overflow: hidden;
-  margin-top: 40px;
+.portfolio-masonry {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
-.portfolio-track {
-  display: flex;
-  gap: 24px;
-  animation: portfolioScroll 30s linear infinite;
-  width: max-content;
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  grid-auto-flow: dense;
 }
-.portfolio-track:hover { animation-play-state: paused; }
 .portfolio-item {
-  width: 320px;
-  height: 400px;
-  flex-shrink: 0;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0,0,0,.1);
   transition: transform .3s var(--ease), box-shadow .3s;
   background: var(--gray-lt);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: var(--gray);
-  font-weight: 600;
+  cursor: pointer;
+  position: relative;
 }
 .portfolio-item:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 48px rgba(0,0,0,.15);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0,0,0,.2);
 }
 .portfolio-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-@keyframes portfolioScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* Tall items for portrait images */
+.portfolio-item:nth-child(1),  /* branding.jpeg - 1280×720 */
+.portfolio-item:nth-child(2)   /* flyer.jpeg - 1600×1066 */ {
+  grid-row: span 1;
+}
+
+/* Wide items for landscape images */
+.portfolio-item:nth-child(3),  /* packaging1.jpg - 4000×2665 */
+.portfolio-item:nth-child(4)   /* packaging2.jpg - 6000×4004 */ {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+/* Square items */
+.portfolio-item:nth-child(5),  /* post1.jpg - 1080×1080 */
+.portfolio-item:nth-child(6),  /* post2.jpg - 1080×1080 */
+.portfolio-item:nth-child(7),  /* post3.jpg - 1080×1080 */
+.portfolio-item:nth-child(8),  /* post4.jpg - 1080×1080 */
+.portfolio-item:nth-child(9)   /* standee.jpg - 1201×1201 */ {
+  grid-row: span 1;
+}
+
+/* Book items */
+.portfolio-item:nth-child(10), /* book1.jpg - varies */
+.portfolio-item:nth-child(11)  /* book2.jpg - 4000×3000 */ {
+  grid-column: span 1;
 }
 
 /* ═══════════════════════════════════
-   ⑥ VIDEO SHOWCASE
+   ⑥ VIDEO SHOWCASE - UPDATED
 ═══════════════════════════════════ */
 .videos { background: var(--cream); }
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 .video-card {
@@ -757,7 +773,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  pointer-events: none; /* Disable all user interaction */
+  pointer-events: none;
 }
 .video-card video::-webkit-media-controls {
   display: none !important;
@@ -774,20 +790,9 @@ body {
 .video-card video::-webkit-media-controls-start-playback-button {
   display: none !important;
 }
-.video-card__placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
-  color: var(--white);
-  font-size: 16px;
-  font-weight: 600;
-}
 
 /* ═══════════════════════════════════
-   ⑦ PRICING
+   ⑦ PRICING - UPDATED TO USD
 ═══════════════════════════════════ */
 .pricing { background: var(--white); }
 .pricing-grid {
@@ -1157,7 +1162,12 @@ body {
   .process__steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
   .process__steps::before { display: none; }
   .testi-grid     { grid-template-columns: repeat(2, 1fr); }
-  .portfolio-item { width: 280px; height: 350px; }
+  .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+  .portfolio-item:nth-child(3),
+  .portfolio-item:nth-child(4) { 
+    grid-column: span 1; 
+  }
+  .video-grid { grid-template-columns: repeat(2, 1fr); }
   .lead-form-container { grid-template-columns: 1fr; gap: 50px; }
   .lead-form-left { text-align: center; align-items: center; }
   .lead-form-cta-btns { justify-content: center; }
@@ -1168,7 +1178,7 @@ body {
   .process__steps { grid-template-columns: 1fr; }
   .hero__stats { flex-direction: column; align-items: center; }
   .stat-pill { width: 100%; max-width: 220px; }
-  .portfolio-item { width: 240px; height: 300px; }
+  .portfolio-grid { grid-template-columns: 1fr; }
   .video-grid { grid-template-columns: 1fr; }
   .hero__trust { font-size: 14px; }
   .hero__trust::before,
@@ -1398,7 +1408,7 @@ body {
 </section>
 
 <!-- ═══════════════════════════════════
-     ⑤ PORTFOLIO GALLERY
+     ⑤ PORTFOLIO GALLERY - MASONRY GRID
 ═══════════════════════════════════ -->
 <section class="section portfolio pg" id="portfolio">
   <div class="container">
@@ -1409,32 +1419,35 @@ body {
     </div>
   </div>
 
-  <div class="portfolio-slider">
-    <div class="portfolio-track">
-      <!-- Portfolio images p1.jpg through p8.jpg -->
-      <div class="portfolio-item"><img src="p1.jpg" alt="Project 1" onerror="this.parentElement.innerHTML='P1'"></div>
-      <div class="portfolio-item"><img src="p2.jpg" alt="Project 2" onerror="this.parentElement.innerHTML='P2'"></div>
-      <div class="portfolio-item"><img src="p3.jpg" alt="Project 3" onerror="this.parentElement.innerHTML='P3'"></div>
-      <div class="portfolio-item"><img src="p4.jpg" alt="Project 4" onerror="this.parentElement.innerHTML='P4'"></div>
-      <div class="portfolio-item"><img src="p5.jpg" alt="Project 5" onerror="this.parentElement.innerHTML='P5'"></div>
-      <div class="portfolio-item"><img src="p6.jpg" alt="Project 6" onerror="this.parentElement.innerHTML='P6'"></div>
-      <div class="portfolio-item"><img src="p7.jpg" alt="Project 7" onerror="this.parentElement.innerHTML='P7'"></div>
-      <div class="portfolio-item"><img src="p8.jpg" alt="Project 8" onerror="this.parentElement.innerHTML='P8'"></div>
-      <!-- Duplicate for seamless loop -->
-      <div class="portfolio-item"><img src="p1.jpg" alt="Project 1" onerror="this.parentElement.innerHTML='P1'"></div>
-      <div class="portfolio-item"><img src="p2.jpg" alt="Project 2" onerror="this.parentElement.innerHTML='P2'"></div>
-      <div class="portfolio-item"><img src="p3.jpg" alt="Project 3" onerror="this.parentElement.innerHTML='P3'"></div>
-      <div class="portfolio-item"><img src="p4.jpg" alt="Project 4" onerror="this.parentElement.innerHTML='P4'"></div>
-      <div class="portfolio-item"><img src="p5.jpg" alt="Project 5" onerror="this.parentElement.innerHTML='P5'"></div>
-      <div class="portfolio-item"><img src="p6.jpg" alt="Project 6" onerror="this.parentElement.innerHTML='P6'"></div>
-      <div class="portfolio-item"><img src="p7.jpg" alt="Project 7" onerror="this.parentElement.innerHTML='P7'"></div>
-      <div class="portfolio-item"><img src="p8.jpg" alt="Project 8" onerror="this.parentElement.innerHTML='P8'"></div>
+  <div class="portfolio-masonry">
+    <div class="portfolio-grid">
+      <!-- Image Portfolio Items with proper filenames -->
+      <div class="portfolio-item reveal"><img src="branding.jpeg" alt="Branding Project"></div>
+      <div class="portfolio-item reveal"><img src="flyer.jpeg" alt="Flyer Design"></div>
+      <div class="portfolio-item reveal"><img src="packaging1.jpg" alt="Packaging Design 1"></div>
+      <div class="portfolio-item reveal"><img src="packaging2.jpg" alt="Packaging Design 2"></div>
+      <div class="portfolio-item reveal"><img src="post1.jpg" alt="Social Media Post 1"></div>
+      <div class="portfolio-item reveal"><img src="post2.jpg" alt="Social Media Post 2"></div>
+      <div class="portfolio-item reveal"><img src="post3.jpg" alt="Social Media Post 3"></div>
+      <div class="portfolio-item reveal"><img src="post4.jpg" alt="Social Media Post 4"></div>
+      <div class="portfolio-item reveal"><img src="standee.jpg" alt="Standee Design"></div>
+      <div class="portfolio-item reveal"><img src="book1.jpg" alt="Book Design 1"></div>
+      <div class="portfolio-item reveal"><img src="book2.jpg" alt="Book Design 2"></div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 48px;">
+      <a href="https://drive.google.com/drive/folders/1NSXLzLhPPJ9fIfTh023Y0rI6FYts1Mr_" target="_blank" class="btn btn--primary">
+        View Full Portfolio
+        <svg width="18" height="11" viewBox="0 0 26 16" fill="none">
+          <path d="M1 7a1 1 0 0 0 0 2V7Zm24.707 1.707a1 1 0 0 0 0-1.414L19.343.929a1 1 0 1 0-1.414 1.414L23.586 8l-5.657 5.657a1 1 0 0 0 1.414 1.414l6.364-6.364ZM1 9h24V7H1v2Z" fill="#fff"/>
+        </svg>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════
-     ⑥ VIDEO SHOWCASE
+     ⑥ VIDEO SHOWCASE - UPDATED WITH CGI VIDEOS
 ═══════════════════════════════════ -->
 <section class="section videos pg">
   <div class="container">
@@ -1447,20 +1460,17 @@ body {
     <div class="video-grid">
       <div class="video-card reveal">
         <video autoplay loop muted playsinline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
-          <source src="v1.mp4" type="video/mp4">
-          <div class="video-card__placeholder">V1<br>Upload Video</div>
+          <source src="cgi1.mp4" type="video/mp4">
         </video>
       </div>
       <div class="video-card reveal reveal-delay-1">
         <video autoplay loop muted playsinline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
-          <source src="v2.mp4" type="video/mp4">
-          <div class="video-card__placeholder">V2<br>Upload Video</div>
+          <source src="cgi2.mp4" type="video/mp4">
         </video>
       </div>
       <div class="video-card reveal reveal-delay-2">
         <video autoplay loop muted playsinline disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
-          <source src="v3.mp4" type="video/mp4">
-          <div class="video-card__placeholder">V3<br>Upload Video</div>
+          <source src="cgi3.mp4" type="video/mp4">
         </video>
       </div>
     </div>
@@ -1468,7 +1478,7 @@ body {
 </section>
 
 <!-- ═══════════════════════════════════
-     ⑦ PRICING
+     ⑦ PRICING - UPDATED TO USD
 ═══════════════════════════════════ -->
 <section class="section pricing pg" id="pricing">
   <div class="container">
@@ -1483,7 +1493,7 @@ body {
       <div class="pricing-card reveal reveal-delay-1">
         <h3 class="pricing-card__name">Presence Plan</h3>
         <div class="pricing-card__price">
-          ₹35,000
+          $499
         </div>
         <p class="pricing-card__period">per month</p>
         <ul class="pricing-features">
@@ -1504,7 +1514,7 @@ body {
       <div class="pricing-card pricing-card--featured reveal reveal-delay-2">
         <h3 class="pricing-card__name">Growth Plan</h3>
         <div class="pricing-card__price">
-          ₹50,000
+          $599
         </div>
         <p class="pricing-card__period">per month</p>
         <ul class="pricing-features">
@@ -1526,7 +1536,7 @@ body {
       <div class="pricing-card reveal reveal-delay-3">
         <h3 class="pricing-card__name">Performance Plan</h3>
         <div class="pricing-card__price">
-          ₹75,000
+          $899
         </div>
         <p class="pricing-card__period">per month</p>
         <ul class="pricing-features">
@@ -1742,9 +1752,9 @@ body {
           <label for="plan">Interested In *</label>
           <select id="plan" name="plan" required>
             <option value="">Select a plan</option>
-            <option value="presence">Presence Plan (₹35,000/month)</option>
-            <option value="growth">Growth Plan (₹50,000/month)</option>
-            <option value="performance">Performance Plan (₹75,000/month)</option>
+            <option value="presence">Presence Plan ($499/month)</option>
+            <option value="growth">Growth Plan ($599/month)</option>
+            <option value="performance">Performance Plan ($899/month)</option>
             <option value="custom">Custom Solution</option>
           </select>
         </div>
