@@ -683,20 +683,41 @@ body {
 }
 
 /* ═══════════════════════════════════
-   ⑤ PORTFOLIO GALLERY - CLEAN UNIFORM GRID
+   ⑤ PORTFOLIO GALLERY - HORIZONTAL CAROUSEL
 ═══════════════════════════════════ */
-.portfolio { background: var(--white); }
-.portfolio-masonry {
-  max-width: 1400px;
+.portfolio { background: var(--white); overflow: hidden; }
+.portfolio-carousel {
+  position: relative;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 24px;
 }
-.portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+.portfolio-scroll {
+  display: flex;
   gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 40px 24px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy) var(--gray-lt);
+}
+.portfolio-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.portfolio-scroll::-webkit-scrollbar-track {
+  background: var(--gray-lt);
+  border-radius: 10px;
+}
+.portfolio-scroll::-webkit-scrollbar-thumb {
+  background: var(--navy);
+  border-radius: 10px;
+}
+.portfolio-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--navy-dark);
 }
 .portfolio-item {
+  flex: 0 0 380px;
+  height: 380px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0,0,0,.1);
@@ -704,16 +725,14 @@ body {
   background: var(--white);
   cursor: pointer;
   position: relative;
-  /* Fixed aspect ratio container */
-  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
 }
 .portfolio-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0,0,0,.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0,0,0,.25);
 }
 .portfolio-item img {
   max-width: 100%;
@@ -722,7 +741,115 @@ body {
   height: auto;
   object-fit: contain;
   display: block;
-  margin: auto;
+  pointer-events: none;
+}
+
+/* Lightbox/Modal for zoomed view */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  animation: fadeIn .3s ease;
+}
+.lightbox.active {
+  display: flex;
+}
+.lightbox__content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  animation: zoomIn .3s var(--ease);
+}
+.lightbox__image {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 80px rgba(0,0,0,.5);
+}
+.lightbox__close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s, background .2s;
+  font-weight: 300;
+  line-height: 1;
+}
+.lightbox__close:hover {
+  transform: rotate(90deg);
+  background: var(--navy);
+  color: var(--white);
+}
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,.9);
+  color: var(--black);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .2s;
+  font-weight: 300;
+}
+.lightbox__nav:hover {
+  background: var(--white);
+  transform: translateY(-50%) scale(1.1);
+}
+.lightbox__prev {
+  left: 20px;
+}
+.lightbox__next {
+  right: 20px;
+}
+.lightbox__counter {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(255,255,255,.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 /* ═══════════════════════════════════
@@ -1142,7 +1269,7 @@ body {
   .process__steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
   .process__steps::before { display: none; }
   .testi-grid     { grid-template-columns: repeat(2, 1fr); }
-  .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+  .portfolio-item { flex: 0 0 300px; height: 300px; }
   .video-grid { grid-template-columns: repeat(2, 1fr); }
   .lead-form-container { grid-template-columns: 1fr; gap: 50px; }
   .lead-form-left { text-align: center; align-items: center; }
@@ -1154,7 +1281,8 @@ body {
   .process__steps { grid-template-columns: 1fr; }
   .hero__stats { flex-direction: column; align-items: center; }
   .stat-pill { width: 100%; max-width: 220px; }
-  .portfolio-grid { grid-template-columns: 1fr; }
+  .portfolio-item { flex: 0 0 280px; height: 280px; }
+  .portfolio-scroll { padding: 40px 16px; }
   .video-grid { grid-template-columns: 1fr; }
   .hero__trust { font-size: 14px; }
   .hero__trust::before,
@@ -1165,6 +1293,11 @@ body {
   .testi-grid { grid-template-columns: 1fr; }
   .lead-form-wrapper { padding: 32px 24px; }
   .lead-form-section { padding: 72px 0; }
+  .lightbox { padding: 20px; }
+  .lightbox__close { top: -40px; width: 36px; height: 36px; font-size: 20px; }
+  .lightbox__nav { width: 40px; height: 40px; font-size: 20px; }
+  .lightbox__prev { left: 10px; }
+  .lightbox__next { right: 10px; }
 }
 </style>
 </head>
@@ -1384,34 +1517,56 @@ body {
 </section>
 
 <!-- ═══════════════════════════════════
-     ⑤ PORTFOLIO GALLERY - MASONRY GRID
+     ⑤ PORTFOLIO GALLERY - HORIZONTAL CAROUSEL
 ═══════════════════════════════════ -->
 <section class="section portfolio pg" id="portfolio">
   <div class="container">
     <div class="section-head reveal">
       <div class="tag">Our Work</div>
       <h2 class="section-head__h2">Brands We've<br>Brought to Life</h2>
-      <p class="section-head__sub">Real projects delivering real results for growing businesses.</p>
+      <p class="section-head__sub">Real projects delivering real results for growing businesses. Click any image to view larger.</p>
     </div>
   </div>
 
-  <div class="portfolio-masonry">
-    <div class="portfolio-grid">
-      <!-- Image Portfolio Items with proper filenames -->
-      <div class="portfolio-item reveal"><img src="branding.jpeg" alt="Branding Project"></div>
-      <div class="portfolio-item reveal"><img src="flyer.jpeg" alt="Flyer Design"></div>
-      <div class="portfolio-item reveal"><img src="packaging1.jpg" alt="Packaging Design 1"></div>
-      <div class="portfolio-item reveal"><img src="packaging2.jpg" alt="Packaging Design 2"></div>
-      <div class="portfolio-item reveal"><img src="post1.jpg" alt="Social Media Post 1"></div>
-      <div class="portfolio-item reveal"><img src="post2.jpg" alt="Social Media Post 2"></div>
-      <div class="portfolio-item reveal"><img src="post3.jpg" alt="Social Media Post 3"></div>
-      <div class="portfolio-item reveal"><img src="post4.jpg" alt="Social Media Post 4"></div>
-      <div class="portfolio-item reveal"><img src="standee.jpg" alt="Standee Design"></div>
-      <div class="portfolio-item reveal"><img src="book1.jpg" alt="Book Design 1"></div>
-      <div class="portfolio-item reveal"><img src="book2.jpg" alt="Book Design 2"></div>
+  <div class="portfolio-carousel">
+    <div class="portfolio-scroll" id="portfolioScroll">
+      <!-- Image Portfolio Items -->
+      <div class="portfolio-item reveal" data-index="0">
+        <img src="branding.jpeg" alt="Branding Project">
+      </div>
+      <div class="portfolio-item reveal" data-index="1">
+        <img src="flyer.jpeg" alt="Flyer Design">
+      </div>
+      <div class="portfolio-item reveal" data-index="2">
+        <img src="packaging1.jpg" alt="Packaging Design 1">
+      </div>
+      <div class="portfolio-item reveal" data-index="3">
+        <img src="packaging2.jpg" alt="Packaging Design 2">
+      </div>
+      <div class="portfolio-item reveal" data-index="4">
+        <img src="post1.jpg" alt="Social Media Post 1">
+      </div>
+      <div class="portfolio-item reveal" data-index="5">
+        <img src="post2.jpg" alt="Social Media Post 2">
+      </div>
+      <div class="portfolio-item reveal" data-index="6">
+        <img src="post3.jpg" alt="Social Media Post 3">
+      </div>
+      <div class="portfolio-item reveal" data-index="7">
+        <img src="post4.jpg" alt="Social Media Post 4">
+      </div>
+      <div class="portfolio-item reveal" data-index="8">
+        <img src="standee.jpg" alt="Standee Design">
+      </div>
+      <div class="portfolio-item reveal" data-index="9">
+        <img src="book1.jpg" alt="Book Design 1">
+      </div>
+      <div class="portfolio-item reveal" data-index="10">
+        <img src="book2.jpg" alt="Book Design 2">
+      </div>
     </div>
     
-    <div style="text-align: center; margin-top: 48px;">
+    <div style="text-align: center; margin-top: 20px; padding: 0 24px;">
       <a href="https://drive.google.com/drive/folders/1NSXLzLhPPJ9fIfTh023Y0rI6FYts1Mr_" target="_blank" class="btn btn--primary">
         View Full Portfolio
         <svg width="18" height="11" viewBox="0 0 26 16" fill="none">
@@ -1421,6 +1576,17 @@ body {
     </div>
   </div>
 </section>
+
+<!-- Lightbox Modal -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox__content">
+    <button class="lightbox__close" id="lightboxClose">×</button>
+    <img class="lightbox__image" id="lightboxImage" src="" alt="">
+    <button class="lightbox__nav lightbox__prev" id="lightboxPrev">‹</button>
+    <button class="lightbox__nav lightbox__next" id="lightboxNext">›</button>
+    <div class="lightbox__counter" id="lightboxCounter">1 / 11</div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════
      ⑥ VIDEO SHOWCASE - UPDATED WITH CGI VIDEOS
@@ -1855,6 +2021,79 @@ const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ══════════════════════════════════════════════════
+   PORTFOLIO LIGHTBOX - Click to Zoom
+══════════════════════════════════════════════════ */
+(function() {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.getElementById('lightboxImage');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  const portfolioItems = document.querySelectorAll('.portfolio-item');
+  
+  let currentIndex = 0;
+  const totalImages = portfolioItems.length;
+  
+  // Open lightbox when clicking portfolio item
+  portfolioItems.forEach((item, index) => {
+    item.addEventListener('click', function() {
+      currentIndex = index;
+      openLightbox();
+    });
+  });
+  
+  function openLightbox() {
+    const img = portfolioItems[currentIndex].querySelector('img');
+    lightboxImage.src = img.src;
+    lightboxImage.alt = img.alt;
+    updateCounter();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+  }
+  
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scroll
+  }
+  
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % totalImages;
+    openLightbox();
+  }
+  
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+    openLightbox();
+  }
+  
+  function updateCounter() {
+    lightboxCounter.textContent = `${currentIndex + 1} / ${totalImages}`;
+  }
+  
+  // Event listeners
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxNext.addEventListener('click', nextImage);
+  lightboxPrev.addEventListener('click', prevImage);
+  
+  // Close on background click
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
+  });
+})();
 
 /* ── Check for success/error messages in URL ── */
 window.addEventListener('DOMContentLoaded', function() {
